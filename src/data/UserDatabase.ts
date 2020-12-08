@@ -1,4 +1,5 @@
 import { DuplicateError } from "../error/DuplicateError";
+import { InvalidInputError } from "../error/InvalidInputError";
 import { User } from "../model/User";
 import { BaseDatabase } from "./BaseDatabase";
 
@@ -27,5 +28,19 @@ export class UserDatabase extends BaseDatabase {
             throw new Error(error.message || error.sqlMessage)
         }
         
+    }
+
+    async getByEmail(email: string) {
+        try {
+            const result = await this.getConnection()
+            .select("*")
+            .from(this.tableNames.users)
+            .where("email", email)
+
+            return result[0]
+            
+        } catch (error) {
+            throw new Error(error.message || error.sqlMessage)
+        }
     }
 }

@@ -1,6 +1,6 @@
 import { UserDatabase } from "../data/UserDatabase";
 import { InvalidInputError } from "../error/InvalidInputError";
-import { User, UserInputDTO } from "../model/User";
+import { User, UserInputDTO, UserInputLoginEmailDTO } from "../model/User";
 import { Authenticator } from "../services/Authenticator";
 import { HashManager } from "../services/HashManager";
 import { IdGenerator } from "../services/IdGenerator";
@@ -46,5 +46,38 @@ export class UserBusiness {
         }
 
        
+    }
+
+    async login(input: UserInputLoginEmailDTO){
+        try {
+
+            if(!input.email || !input.password) {
+                throw new InvalidInputError("Fill in all fields")
+            }
+
+            if(input.email.indexOf("@") === -1){
+                throw new InvalidInputError("Invalid email format")
+            }
+
+            const userDatabase: UserDatabase = new UserDatabase()
+            const userFromDB = await userDatabase.getByEmail(input.email)
+            const user = new User(userFromDB.id, userFromDB.name, userFromDB.nickname, userFromDB.email, userFromDB.password)
+            
+            const hash = new HashManager()
+            const hashCompare = await hash.compare(input.password, user.getPassword())
+
+            if(!hashCompare) {
+                throw new InvalidInputError("Invalid password.")
+            }
+            
+            const auth = new Authenticator()
+            const token = auth.generateToken({id: user.getId()})
+
+            return token
+            
+        } catch (error) {
+          
+            throw new Error(error.message || error.sqlMessage)
+        }
     }
 }
