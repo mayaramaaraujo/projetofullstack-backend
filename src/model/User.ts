@@ -29,3 +29,15 @@ export class User {
         return new User(user.id, user.name, user.nickname, user.email, user.password)
     }
 }
+
+export interface UserInputDTO {
+    name: string,
+    nickname: string,
+    email: string,
+    password: string
+}
+
+export interface UserInputLoginEmailDTO {
+    email: string,
+    password: string
+}
