@@ -3,13 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BaseDatabse = void 0;
+exports.baseDatabase = exports.BaseDatabase = void 0;
 const knex_1 = __importDefault(require("knex"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-class BaseDatabse {
+class BaseDatabase {
     getConnection() {
-        return BaseDatabse.connection = knex_1.default({
+        return BaseDatabase.connection = knex_1.default({
             client: "mysql",
             connection: {
                 host: process.env.DB_HOST,
@@ -22,7 +22,8 @@ class BaseDatabse {
     }
     ;
 }
-exports.BaseDatabse = BaseDatabse;
-BaseDatabse.connection = null;
+exports.BaseDatabase = BaseDatabase;
+BaseDatabase.connection = null;
 ;
+exports.baseDatabase = new BaseDatabase();
 //# sourceMappingURL=BaseDatabase.js.map
