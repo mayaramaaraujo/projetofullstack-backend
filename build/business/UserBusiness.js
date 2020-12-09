@@ -48,6 +48,32 @@ class UserBusiness {
             }
         });
     }
+    login(input) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                if (!input.email || !input.password) {
+                    throw new InvalidInputError_1.InvalidInputError("Fill in all fields");
+                }
+                if (input.email.indexOf("@") === -1) {
+                    throw new InvalidInputError_1.InvalidInputError("Invalid email format");
+                }
+                const userDatabase = new UserDatabase_1.UserDatabase();
+                const userFromDB = yield userDatabase.getByEmail(input.email);
+                const user = new User_1.User(userFromDB.id, userFromDB.name, userFromDB.nickname, userFromDB.email, userFromDB.password);
+                const hash = new HashManager_1.HashManager();
+                const hashCompare = yield hash.compare(input.password, user.getPassword());
+                if (!hashCompare) {
+                    throw new InvalidInputError_1.InvalidInputError("Invalid password.");
+                }
+                const auth = new Authenticator_1.Authenticator();
+                const token = auth.generateToken({ id: user.getId() });
+                return token;
+            }
+            catch (error) {
+                throw new Error(error.message || error.sqlMessage);
+            }
+        });
+    }
 }
 exports.UserBusiness = UserBusiness;
 //# sourceMappingURL=UserBusiness.js.map

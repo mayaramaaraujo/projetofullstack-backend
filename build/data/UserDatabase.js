@@ -24,17 +24,31 @@ class UserDatabase extends BaseDatabase_1.BaseDatabase {
                     email: user.getEmail(),
                     password: user.getPassword()
                 })
-                    .into(UserDatabase.TABLE_NAME);
+                    .into(this.tableNames.users);
             }
             catch (error) {
                 if (error.sqlMessage.includes("Duplicate entry")) {
                     throw new DuplicateError_1.DuplicateError("User already registered.");
                 }
+                console.log(error.sqlMessage);
+                throw new Error(error.message || error.sqlMessage);
+            }
+        });
+    }
+    getByEmail(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = yield this.getConnection()
+                    .select("*")
+                    .from(this.tableNames.users)
+                    .where("email", email);
+                return result[0];
+            }
+            catch (error) {
                 throw new Error(error.message || error.sqlMessage);
             }
         });
     }
 }
 exports.UserDatabase = UserDatabase;
-UserDatabase.TABLE_NAME = "lamusic_users";
 //# sourceMappingURL=UserDatabase.js.map
