@@ -21,4 +21,31 @@ export class MusicDatabase extends BaseDatabase {
             throw new Error(error.message || error.message)
         }
     }
+
+    public async getMusics(author_id: string){
+        try {
+            const result = await this.getConnection()
+            .select("*")
+            .from(this.tableNames.musics)
+            .where("author_id", author_id)
+
+            return result[0]
+        } catch (error) {
+            throw new Error(error.sqlMessage || error.message)
+        }
+    }
+
+    public async getAll(author_id: string){
+        try {
+            
+            const result = await this.getConnection()
+            .select("*")
+            .from(this.tableNames.musics)
+            .where("author_id", author_id)
+
+            return result[0]
+        } catch (error) {
+            throw new Error(error.sqlMessage || error.message)
+        }
+    }
 }
