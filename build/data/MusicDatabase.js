@@ -9,40 +9,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GenreDatabase = void 0;
-const DuplicateError_1 = require("../error/DuplicateError");
+exports.MusicDatabase = void 0;
 const BaseDatabase_1 = require("./BaseDatabase");
-class GenreDatabase extends BaseDatabase_1.BaseDatabase {
-    createGenre(genre) {
+class MusicDatabase extends BaseDatabase_1.BaseDatabase {
+    create(music) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 yield this.getConnection()
                     .insert({
-                    id: genre.getId(),
-                    genre: genre.getName()
+                    id: music.id,
+                    title: music.title,
+                    author_id: music.author_id,
+                    date: music.date,
+                    file: music.file,
+                    genre: music.genre,
+                    album: music.album
                 })
-                    .into(this.tableNames.genres);
+                    .into(this.tableNames.musics);
             }
             catch (error) {
-                if (error.sqlMessage.includes("Duplicate entry")) {
-                    throw new DuplicateError_1.DuplicateError("Genre already registered.");
-                }
-                throw new Error(error.sqlMessage || error.message);
-            }
-        });
-    }
-    delete(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const result = yield this.getConnection().raw(`
-                DELETE FROM ${this.tableNames.genres} WHERE id = "${id}"
-            `);
-            }
-            catch (error) {
-                throw new Error(error.message || error.sqlMessage);
+                throw new Error(error.message || error.message);
             }
         });
     }
 }
-exports.GenreDatabase = GenreDatabase;
-//# sourceMappingURL=GenreDatabase.js.map
+exports.MusicDatabase = MusicDatabase;
+//# sourceMappingURL=MusicDatabase.js.map

@@ -43,6 +43,9 @@ class GenreBusiness {
     delete(id, token) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                if (!token) {
+                    throw new UnauthorizedError_1.UnauthorizedError("Unauthorized user.");
+                }
                 const tokenData = new Authenticator_1.Authenticator();
                 const data = tokenData.getData(token);
                 if (!data) {

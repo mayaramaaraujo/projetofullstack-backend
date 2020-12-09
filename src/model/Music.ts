@@ -1,17 +1,17 @@
 export class Music {
-    id: string
-    title: string
-    author_id: string
-    date: Date
-    file: string
-    genre: string
-    album: string
+    private id: string
+    private title: string
+    private author_id: string
+    private date: string
+    private file: string
+    private genre: string
+    private album: string
 
     constructor(
         id: string,
         title: string,
         author_id: string,
-        date: Date,
+        date: string,
         file: string,
         genre: string,
         album: string,
@@ -52,4 +52,12 @@ export class Music {
     public getAlbum(){
         return this.album
     }
+}
+
+export interface MusicBusinessInput {
+    token: string,
+    title: string,
+    file: string,
+    genre: string,
+    album: string
 }
