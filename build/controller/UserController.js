@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const UserBusiness_1 = require("../business/UserBusiness");
+const BaseDatabase_1 = require("../data/BaseDatabase");
 class UserController {
     signup(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -29,7 +30,30 @@ class UserController {
                 });
             }
             catch (error) {
-                res.status(error.code).send({ error: error.message });
+                res.status(400).send({ error: error.message });
+            }
+            yield BaseDatabase_1.BaseDatabase.destroyConnection();
+        });
+    }
+    login(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const input = {
+                    email: req.body.email,
+                    password: req.body.password
+                };
+                const userBusiness = new UserBusiness_1.UserBusiness();
+                const token = yield userBusiness.login(input);
+                res.status(200).send({
+                    token: token,
+                    message: "User successfully logged in."
+                });
+            }
+            catch (error) {
+                if (error.message.includes("Cannot read property")) {
+                    res.status(409).send("Invalid email.");
+                }
+                res.status(400).send(error.message);
             }
         });
     }
