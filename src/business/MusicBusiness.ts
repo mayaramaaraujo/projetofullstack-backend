@@ -38,4 +38,48 @@ export class MusicBusiness {
             throw new Error(error.message || error.sqlMessage)
         }
     }
+
+    public async getMusics(token: string){
+        try {
+            const tokenData = new Authenticator()
+            const author = tokenData.getData(token)
+
+            if(!author){
+                throw new Error("Invalid author")
+            }
+
+            const musicDatabase = new MusicDatabase()
+            const result = await musicDatabase.getMusics(author.id)
+
+            if(!result){
+                throw new Error("Invalid id. Musics not found.")
+            }
+
+            return result
+        } catch (error) {
+            throw new Error(error.message || error.sqlMessage)
+        }
+    }
+
+    public async getMusicsByAuthorId(author_id: string, token: string){
+        try {
+            const tokenData = new Authenticator()
+            const author = tokenData.getData(token)
+
+            if(!author){
+                throw new Error("Unauthorized user.")
+            }
+
+            const musicDatabase = new MusicDatabase()
+            const result = await musicDatabase.getMusics(author_id)
+
+            if(!result){
+                throw new Error("Invalid id. Musics not found.")
+            }
+
+            return result
+        } catch (error) {
+            throw new Error(error.message || error.sqlMessage)
+        }
+    }
 }

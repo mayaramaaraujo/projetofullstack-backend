@@ -21,4 +21,38 @@ export class MusicController {
             res.status(400).send(error.message || error.sqlMessage)
         }
     }
+
+    public async getMusics(req: Request, res: Response){
+        try {
+            const token: string = req.headers.authorization as string
+
+            const musicBusiness = new MusicBusiness()
+            const result = await musicBusiness.getMusics(token)
+
+            res.status(200).send(result)
+        } catch (error) {
+            res.status(400).send(error.message || error.sqlMessage)
+        }
+    }
+
+    public async getByAuthorId(req: Request, res: Response){
+        try {
+            const token: string = req.headers.authorization as string
+            const author_id: string = req.params.author_id
+
+            const musicBusiness = new MusicBusiness()
+            const result = await musicBusiness.getMusicsByAuthorId(author_id, token)
+
+            res.status(200).send(result)
+        } catch (error) {
+            let errorMessage;
+            let errorCode;
+
+            if(error.message.includes("jwt must be provided")){
+               errorMessage = "Unauthorized user."
+               errorCode = 401
+            }
+            res.status(errorCode || 400).send(errorMessage || error.message || error.sqlMessage)
+        }
+    }
 }
