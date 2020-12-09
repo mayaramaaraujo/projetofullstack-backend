@@ -9,45 +9,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserDatabase = void 0;
+exports.GenreDatabase = void 0;
 const DuplicateError_1 = require("../error/DuplicateError");
 const BaseDatabase_1 = require("./BaseDatabase");
-class UserDatabase extends BaseDatabase_1.BaseDatabase {
-    signUp(user) {
+class GenreDatabase extends BaseDatabase_1.BaseDatabase {
+    createGenre(genre) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 yield this.getConnection()
                     .insert({
-                    id: user.getId(),
-                    name: user.getName(),
-                    nickname: user.getNickname(),
-                    email: user.getEmail(),
-                    password: user.getPassword()
+                    id: genre.getId(),
+                    genre: genre.getName()
                 })
-                    .into(this.tableNames.users);
+                    .into(this.tableNames.genres);
             }
             catch (error) {
                 if (error.sqlMessage.includes("Duplicate entry")) {
                     throw new DuplicateError_1.DuplicateError("User already registered.");
                 }
-                throw new Error(error.message || error.sqlMessage);
-            }
-        });
-    }
-    getByEmail(email) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const result = yield this.getConnection()
-                    .select("*")
-                    .from(this.tableNames.users)
-                    .where("email", email);
-                return result[0];
-            }
-            catch (error) {
-                throw new Error(error.message || error.sqlMessage);
+                throw new Error(error.sqlMessage || error.message);
             }
         });
     }
 }
-exports.UserDatabase = UserDatabase;
-//# sourceMappingURL=UserDatabase.js.map
+exports.GenreDatabase = GenreDatabase;
+//# sourceMappingURL=GenreDatabase.js.map

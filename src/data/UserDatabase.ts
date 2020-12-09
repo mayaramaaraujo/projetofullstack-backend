@@ -1,5 +1,4 @@
 import { DuplicateError } from "../error/DuplicateError";
-import { InvalidInputError } from "../error/InvalidInputError";
 import { User } from "../model/User";
 import { BaseDatabase } from "./BaseDatabase";
 
@@ -22,8 +21,6 @@ export class UserDatabase extends BaseDatabase {
             if(error.sqlMessage.includes("Duplicate entry")){
                 throw new DuplicateError("User already registered.")
             }
-
-            console.log(error.sqlMessage)
 
             throw new Error(error.message || error.sqlMessage)
         }
