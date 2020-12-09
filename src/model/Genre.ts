@@ -1,15 +1,20 @@
 export class Genre {
     private id: string
-    private name: string
+    private genre: string
 
     constructor(
         id: string,
-        name: string
+        genre: string
     ) {
         this.id = id
-        this.name = name
+        this.genre = genre
     }
 
     public getId(){ return this.id }
-    public getName(){ return this.name }
+    public getName(){ return this.genre }
+}
+
+export interface inputGenre {
+    token: string,
+    genre: string
 }
