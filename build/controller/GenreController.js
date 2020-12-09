@@ -19,7 +19,6 @@ class GenreController {
                 const genre = req.body.genre;
                 const genreBusiness = new GenreBusiness_1.GenreBusiness();
                 const result = yield genreBusiness.createGenre({ token, genre });
-                console.log(result);
                 res.status(200).send({ id_genre: result, message: "Genre created successfully!" });
             }
             catch (error) {
@@ -32,16 +31,14 @@ class GenreController {
             try {
                 const token = req.headers.authorization;
                 const genreBusiness = new GenreBusiness_1.GenreBusiness();
-                const result = yield genreBusiness.delete(req.params.id, token);
-                console.log(result);
+                yield genreBusiness.delete(req.params.id, token);
                 res.status(200).send("Music genre successfully deleted.");
             }
             catch (error) {
-                throw new Error(error.message || error.sqlMessage);
+                res.status(400).send(error.message || error.sqlMessage);
             }
         });
     }
 }
 exports.GenreController = GenreController;
-debugger;
 //# sourceMappingURL=GenreController.js.map
