@@ -25,9 +25,21 @@ class GenreDatabase extends BaseDatabase_1.BaseDatabase {
             }
             catch (error) {
                 if (error.sqlMessage.includes("Duplicate entry")) {
-                    throw new DuplicateError_1.DuplicateError("User already registered.");
+                    throw new DuplicateError_1.DuplicateError("Genre already registered.");
                 }
                 throw new Error(error.sqlMessage || error.message);
+            }
+        });
+    }
+    delete(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield this.getConnection().raw(`
+                DELETE FROM lamusic_genres WHERE id = "${id}"
+            `);
+            }
+            catch (error) {
+                throw new Error(error.message || error.sqlMessage);
             }
         });
     }

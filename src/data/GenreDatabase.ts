@@ -21,4 +21,15 @@ export class GenreDatabase extends BaseDatabase {
             throw new Error(error.sqlMessage || error.message)
         }
     }
+
+    async delete(id: string){
+        try {
+            const result = await this.getConnection().raw(`
+                DELETE FROM ${this.tableNames.genres} WHERE id = "${id}"
+            `)
+
+        } catch (error) {
+            throw new Error(error.message || error.sqlMessage)
+        }
+    }
 }

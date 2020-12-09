@@ -37,4 +37,29 @@ export class GenreBusiness {
         }
     }
 
+    async delete(id: string, token: string) {
+        try {
+            if(!token){
+                throw new UnauthorizedError("Unauthorized user.")
+            }
+
+            const tokenData = new Authenticator()
+            const data = tokenData.getData(token)
+
+            if(!data) {
+                throw new UnauthorizedError("Unauthorized user.")
+            }
+
+            if(!id){
+                throw new InvalidInputError("id is necessary")
+            }
+
+            const genreDatabase = new GenreDatabase()
+            await genreDatabase.delete(id)
+
+        } catch (error) {
+            throw new Error(error.message || error.sqlMessage)
+        }
+    }
+
 }

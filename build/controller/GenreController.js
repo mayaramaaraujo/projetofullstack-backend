@@ -20,13 +20,28 @@ class GenreController {
                 const genreBusiness = new GenreBusiness_1.GenreBusiness();
                 const result = yield genreBusiness.createGenre({ token, genre });
                 console.log(result);
-                res.status(200).send("Genre created successfully!");
+                res.status(200).send({ id_genre: result, message: "Genre created successfully!" });
             }
             catch (error) {
                 res.status(400).send(error.message || error.sqlMessage);
             }
         });
     }
+    delete(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const token = req.headers.authorization;
+                const genreBusiness = new GenreBusiness_1.GenreBusiness();
+                const result = yield genreBusiness.delete(req.params.id, token);
+                console.log(result);
+                res.status(200).send("Music genre successfully deleted.");
+            }
+            catch (error) {
+                throw new Error(error.message || error.sqlMessage);
+            }
+        });
+    }
 }
 exports.GenreController = GenreController;
+debugger;
 //# sourceMappingURL=GenreController.js.map

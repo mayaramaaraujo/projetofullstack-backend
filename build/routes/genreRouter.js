@@ -9,4 +9,5 @@ const GenreController_1 = require("../controller/GenreController");
 exports.genreRouter = express_1.default.Router();
 const genreController = new GenreController_1.GenreController();
 exports.genreRouter.post("/create", genreController.createGenre);
+exports.genreRouter.delete("/:id", genreController.delete);
 //# sourceMappingURL=genreRouter.js.map

@@ -30,9 +30,29 @@ class GenreBusiness {
                 }
                 const idGenerator = new IdGenerator_1.IdGenerator();
                 const id = idGenerator.generate();
-                const genre = new Genre_1.Genre(id, input.genre);
+                const genre = new Genre_1.Genre(id, input.genre.toLowerCase());
                 const genreDatabase = new GenreDatabase_1.GenreDatabase();
                 yield genreDatabase.createGenre(genre);
+                return id;
+            }
+            catch (error) {
+                throw new Error(error.message || error.sqlMessage);
+            }
+        });
+    }
+    delete(id, token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const tokenData = new Authenticator_1.Authenticator();
+                const data = tokenData.getData(token);
+                if (!data) {
+                    throw new UnauthorizedError_1.UnauthorizedError("Unauthorized user.");
+                }
+                if (!id) {
+                    throw new InvalidInputError_1.InvalidInputError("id is necessary");
+                }
+                const genreDatabase = new GenreDatabase_1.GenreDatabase();
+                yield genreDatabase.delete(id);
             }
             catch (error) {
                 throw new Error(error.message || error.sqlMessage);
