@@ -1,5 +1,6 @@
 import { MusicDatabase } from "../data/MusicDatabase";
 import { InvalidInputError } from "../error/InvalidInputError";
+import { UnauthorizedError } from "../error/UnauthorizedError"
 import { Music, MusicBusinessInput } from "../model/Music";
 import { Authenticator } from "../services/Authenticator";
 import { IdGenerator } from "../services/IdGenerator";
@@ -78,6 +79,27 @@ export class MusicBusiness {
             }
 
             return result
+        } catch (error) {
+            throw new Error(error.message || error.sqlMessage)
+        }
+    }
+
+    public async delete(id: string, token: string){
+        try {
+            const tokenData = new Authenticator()
+            const author = tokenData.getData(token)
+
+            if(!token || !author){
+                throw new UnauthorizedError("Unauthorized user.")
+            }
+
+            if(!id){
+                throw new InvalidInputError("Enter an id")                
+            }
+
+            const musicDatabase = new MusicDatabase()
+            await musicDatabase.delete(id)
+
         } catch (error) {
             throw new Error(error.message || error.sqlMessage)
         }
