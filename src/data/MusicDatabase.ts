@@ -48,4 +48,15 @@ export class MusicDatabase extends BaseDatabase {
             throw new Error(error.sqlMessage || error.message)
         }
     }
+
+    public async delete(id: string){
+        try {
+            await this.getConnection().raw(`
+                 DELETE FROM ${this.tableNames.musics} WHERE id = "${id}"
+            `)
+
+        } catch (error) {
+            throw new Error(error.message || error.sqlMessage)
+        }
+    }
 }

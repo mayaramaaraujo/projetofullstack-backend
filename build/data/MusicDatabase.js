@@ -17,18 +17,58 @@ class MusicDatabase extends BaseDatabase_1.BaseDatabase {
             try {
                 yield this.getConnection()
                     .insert({
-                    id: music.id,
-                    title: music.title,
-                    author_id: music.author_id,
-                    date: music.date,
-                    file: music.file,
-                    genre: music.genre,
-                    album: music.album
+                    id: music.getId(),
+                    title: music.getTitle(),
+                    author_id: music.getAuthorId(),
+                    date: music.getDate(),
+                    file: music.getFile(),
+                    genre: music.getGenre(),
+                    album: music.getAlbum()
                 })
                     .into(this.tableNames.musics);
             }
             catch (error) {
                 throw new Error(error.message || error.message);
+            }
+        });
+    }
+    getMusics(author_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = yield this.getConnection()
+                    .select("*")
+                    .from(this.tableNames.musics)
+                    .where("author_id", author_id);
+                return result[0];
+            }
+            catch (error) {
+                throw new Error(error.sqlMessage || error.message);
+            }
+        });
+    }
+    getAll(author_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = yield this.getConnection()
+                    .select("*")
+                    .from(this.tableNames.musics)
+                    .where("author_id", author_id);
+                return result[0];
+            }
+            catch (error) {
+                throw new Error(error.sqlMessage || error.message);
+            }
+        });
+    }
+    delete(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield this.getConnection().raw(`
+                 DELETE FROM ${this.tableNames.musics} WHERE id = "${id}"
+            `);
+            }
+            catch (error) {
+                throw new Error(error.message || error.sqlMessage);
             }
         });
     }

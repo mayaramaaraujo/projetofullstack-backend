@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { MusicBusiness } from "../business/MusicBusiness";
 import { MusicBusinessInput } from "../model/Music";
+import { Authenticator } from "../services/Authenticator";
 
 export class MusicController {
     public async create(req: Request, res: Response): Promise<void> {
@@ -53,6 +54,25 @@ export class MusicController {
                errorCode = 401
             }
             res.status(errorCode || 400).send(errorMessage || error.message || error.sqlMessage)
+        }
+    }
+
+    public async delete(req:Request, res: Response){
+        try {
+            const token = req.headers.authorization
+
+            if(!token){
+                throw new Error("Insira um token")
+            }
+
+            const id:string = req.params.id
+
+            const musicBusiness = new MusicBusiness()
+            await musicBusiness.delete(id, token)
+
+            res.status(200).send("Music deleted successfully.")
+        } catch (error) {
+            res.status(400).send(error.message || error.sqlMessage)
         }
     }
 }
